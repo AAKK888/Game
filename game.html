@@ -14,3 +14,81 @@
   <script src="game.js"></script>
 </body>
 </html>
+
+/* Styles for the player */
+#player {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: blue;
+}
+
+/* Styles for the platform */
+#platform {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 20px;
+  background-color: green;
+}
+
+
+// Get the canvas and set the context
+var canvas = document.getElementById("game");
+var ctx = canvas.getContext("2d");
+
+// Create the player object
+var player = {
+  x: 50,
+  y: 50,
+  width: 50,
+  height: 50,
+  speed: 5,
+  jumping: false
+};
+
+// Create the platform object
+var platform = {
+  x: 0,
+  y: canvas.height - 20,
+  width: canvas.width,
+  height: 20
+};
+
+// Draw the player on the canvas
+function drawPlayer() {
+  ctx.fillStyle = "blue";
+  ctx.fillRect(player.x, player.y, player.width, player.height);
+}
+
+// Draw the platform on the canvas
+function drawPlatform() {
+  ctx.fillStyle = "green";
+  ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+}
+
+// Handle player movement
+function movePlayer() {
+  if (player.jumping) {
+    player.y -= player.speed;
+    player.jumping = player.y > platform.y - player.height;
+  }
+}
+
+// Update the game state
+function update() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  movePlayer();
+  drawPlayer();
+  drawPlatform();
+  requestAnimationFrame(update);
+}
+
+// Handle key presses
+document.onkeydown = function(e) {
+  if (e.keyCode === 38) { // Up arrow
+    player.jumping = true;
+  }
+};
+
+update();
